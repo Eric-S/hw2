@@ -8,8 +8,9 @@ class MoviesController < ApplicationController
 
   def index
     @sort = params[:sort]
-    #@movies = Movie.all
-    @movies = Movie.find(:all, :order => "#{@sort}")
+    #@movies = Movie.find(:all, :order => "#{@sort}")
+    @movies = Movie.order("#{@sort}").find(:all)
+    @all_ratings = Movie.select("DISTINCT rating").collect {|r| r.rating}
   end
 
   def new
