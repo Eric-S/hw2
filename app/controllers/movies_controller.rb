@@ -7,10 +7,17 @@ class MoviesController < ApplicationController
   end
 
   def index
+    debugger
     @sort = params[:sort]
-    #@movies = Movie.find(:all, :order => "#{@sort}")
-    @movies = Movie.order("#{@sort}").find(:all)
     @all_ratings = Movie.select("DISTINCT rating").collect {|r| r.rating}
+    @selected_ratings = (params[:ratings].present? ? params[:ratings] : [])
+    if not @selected_ratings.present?	#if no items are checked, set the filter to be based on all values
+	@selected_ratings = @all_ratings
+    else
+	@selected_ratings = @selected_ratings.flatten.keep_if{|v|v != "1"}
+    end
+    @movies = Movie.where(:rating => @selected_ratings).order("#{@sort}").find(:all)
+
   end
 
   def new
