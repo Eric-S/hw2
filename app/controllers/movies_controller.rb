@@ -1,5 +1,5 @@
 class MoviesController < ApplicationController
-  @@all_ratings = ['G','PG','PG-13','R']
+  @@all_ratings = ['G','PG','PG-13','R','NC-17']
 
   def get_all_ratings
     return @@all_ratings
@@ -14,7 +14,7 @@ class MoviesController < ApplicationController
   def index
     debugger
     @sort = params[:sort]
-    @all_ratings = Movie.select("DISTINCT rating").collect {|r| r.rating}
+    @all_ratings = get_all_ratings 
     @selected_ratings = (params[:ratings].present? ? params[:ratings] : [])
     if not @selected_ratings.present?	#if no items are checked, set the filter to be based on all values
 	@selected_ratings = @all_ratings
